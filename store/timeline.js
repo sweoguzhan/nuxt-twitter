@@ -12,7 +12,7 @@ export const useTimelineStore = defineStore('timeline', {
         async loadUserTimeline(screenname) {
             const toast = useToast();
             this.loading = true;
-            this.error = null; //
+            this.error = null; ///
             try {
                 const data = await fetchTwitterUserTimeline(screenname);
                 this.timeline = data;
