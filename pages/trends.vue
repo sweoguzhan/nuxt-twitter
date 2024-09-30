@@ -37,3 +37,17 @@ onMounted(() => {
   store.loadTrends('UnitedStates'); // Örnek ülke adı
 });
 </script>
+
+<style scoped lang="postcss">
+
+.v-list-style {
+  @apply m-0 p-4 bg-black flex flex-col gap-4 rounded;
+}
+.loading-container {
+  @apply flex justify-center items-center h-screen;
+}
+.show-more {
+  @apply flex justify-start m-4;
+}
+
+</style>

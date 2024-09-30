@@ -20,22 +20,28 @@
       </v-list-item>
     </v-list>
 
-    <div class="show-more">
+    <div class="show-more" @click="showMore">
       <Text bold fontSize="16px" class="show-more-text">Show more</Text>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import { useTrendsStore } from '~/store/trend.js';
+import {onMounted} from 'vue';
+import {useTrendsStore} from '~/store/trend.js';
 import Text from '~/components/Text.vue';
+import {useRouter} from 'vue-router';
 
 const store = useTrendsStore();
+const router = useRouter();
 
 onMounted(() => {
   store.loadTrends();
 });
+
+const showMore = () => {
+  router.push('/ExplorePage');
+};
 </script>
 
 <style scoped lang="postcss">
@@ -46,13 +52,15 @@ onMounted(() => {
 .trends-header {
   @apply m-4;
 }
+
 .trend-item {
-  @apply justify-between items-start p-0 m-0 ps-0 pe-0;
+  @apply justify-between items-start p-0 m-0 ps-0 pe-0 cursor-pointer;
 }
 
 .trend-info {
   @apply flex flex-col border border-slate-500 w-full p-2.5;
 }
+
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
   @apply p-0 m-0;
 }
@@ -74,11 +82,13 @@ onMounted(() => {
 }
 
 .v-list-style {
-  @apply m-0 p-0 bg-black;
+  @apply m-0 p-4 bg-black flex flex-col gap-4 rounded;
 }
+
 .loading-container {
   @apply flex justify-center items-center h-screen;
 }
+
 .show-more {
   @apply flex justify-start m-4;
 }

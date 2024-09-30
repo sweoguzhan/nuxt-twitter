@@ -136,7 +136,7 @@ export const fetchTwitterUserMedia = async (screenname) => {
     }
 
     const data = await response.json();
-    return data.media;
+    return data.timeline;
 };
 
 export const fetchTweetRetweets = async (tweetId) => {

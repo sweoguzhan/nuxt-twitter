@@ -1,53 +1,44 @@
 <template>
   <v-app>
     <div class="main-container">
-      <!-- Sol Sidebar -->
       <Sidebar />
 
-      <!-- Orta İçerik -->
       <div class="content">
         <NuxtPage />
       </div>
 
-      <!-- Sağdaki Trends -->
-      <Trends />
+      <Trends v-if="!isExplorePage" />
     </div>
   </v-app>
 </template>
 
-<script>
+<script setup>
+import { useRoute } from 'vue-router';
 import Sidebar from './components/Sidebar.vue';
 import Trends from '~/components/Trends.vue';
 
-export default {
-  components: {
-    Sidebar,
-    Trends,
-  },
-};
+const route = useRoute();
+
+const isExplorePage = computed(() => route.path === '/ExplorePage');
 </script>
 
 <style lang="postcss" scoped>
-/* Ana layout konteyneri */
 .main-container {
-  @apply flex min-h-screen font-sans;
+  @apply flex min-h-screen font-sans bg-black;
 }
 
 .sidebar {
   @apply w-1/4 bg-black text-white fixed top-0 left-0 bottom-0;
 }
 
-/* İçerik (orta) */
 .content {
   @apply ml-[25%] mr-[25%] w-[50%] bg-black h-full overflow-y-auto;
 }
 
-/* Trends bileşeni */
 .trends-container {
   @apply w-1/4 bg-black text-white fixed top-0 right-0 bottom-0 overflow-y-auto;
 }
 
-/* Küçük ekranlar için düzenleme */
 @media (max-width: 960px) {
   .main-container {
     @apply flex-col;

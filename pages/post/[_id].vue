@@ -1,6 +1,6 @@
 <template>
   <v-container class="v-container-class">
-    <v-row>
+    <v-row class="v-row-style">
       <v-col cols="12">
 
         <div v-if="store.loading" class="loading-wrapper">

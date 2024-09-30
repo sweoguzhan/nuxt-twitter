@@ -1,6 +1,6 @@
 <template>
   <v-container class="profile-container">
-    <div v-if="store.loading || repliesStore.loading" class="loading-wrapper">
+    <div v-if="store.loading || repliesStore.loading || mediaStore.loading" class="loading-wrapper">
       <v-progress-circular color="white" size="70" indeterminate></v-progress-circular>
     </div>
 
@@ -47,16 +47,47 @@
         </div>
       </div>
     </div>
-    <v-row v-if="!repliesStore.loading && repliesStore.replies?.length">
-      <v-col cols="12" class="post-v-col-12" v-for="post in repliesStore.replies" :key="post.tweet_id" >
-        <Post :post="post" />
-      </v-col>
-    </v-row>
-    <v-row v-else>
-      <v-col cols="12">
-        <Text>No replies found.</Text>
-      </v-col>
-    </v-row>
+
+
+    <v-tabs
+        v-model="tab"
+        bg-color="black"
+        align-tabs="center"
+        class="v-tab-style"
+    >
+      <v-tab value="Replies" >Replies</v-tab>
+      <v-tab value="Media">Media</v-tab>
+    </v-tabs>
+
+    <v-tabs-window v-model="tab">
+      <v-tabs-window-item value="Replies">
+        <v-row class="v-row-style" v-if="!repliesStore.loading && repliesStore.replies?.length">
+          <v-col cols="12" class="post-v-col-12" v-for="post in repliesStore.replies" :key="post.tweet_id" >
+            <Post :post="post" />
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="12">
+            <Text>No replies found.</Text>
+          </v-col>
+        </v-row>
+      </v-tabs-window-item>
+      <v-tabs-window-item value="Media">
+        <v-row class="v-row-style" v-if="!mediaStore.loading && mediaStore.medias?.length">
+          <v-col cols="12" class="post-v-col-12" v-for="post in mediaStore.medias" :key="post.tweet_id" >
+            <Post :post="post" />
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="12">
+            <Text>No media found.</Text>
+          </v-col>
+        </v-row>
+      </v-tabs-window-item>
+
+
+    </v-tabs-window>
+
   </v-container>
 </template>
 
@@ -66,7 +97,11 @@ import { onMounted } from 'vue';
 import { useUserStore } from '~/store/user.js';
 import { useRepliesStore } from "~/store/userReplies.js";
 
+import {useUserMediaStore} from "~/store/usersMedia.js";
+
+
 const store = useUserStore();
+const mediaStore = useUserMediaStore();
 const repliesStore = useRepliesStore();
 const route = useRoute();
 
@@ -74,7 +109,14 @@ onMounted(() => {
   const screenname = route.params.screenname;
   store.loadUserInfo(screenname);
   repliesStore.loadUserReplies(screenname);
+  mediaStore.loadUserMedia(screenname);
+
 });
+
+//Tab value
+const tab = ref('Replies');
+
+
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
   const date = new Date(dateStr);
@@ -154,5 +196,11 @@ const formatDate = (dateStr) => {
 }
 .post-v-col-12 {
   @apply p-0 m-0;
+}
+.v-row-style{
+  @apply p-0 m-0;
+}
+.v-tab-style{
+  @apply flex flex-row flex-wrap gap-4 items-center justify-center;
 }
 </style>
